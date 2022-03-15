@@ -1,6 +1,1 @@
-*
-
-!.gitignore
-!*.go
-!go.mod
-!go.sum
+*.r1cs

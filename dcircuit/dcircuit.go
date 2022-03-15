@@ -13,7 +13,7 @@ type DCircuit struct {
 	BirthYear        frontend.Variable //uint64
 	Income           frontend.Variable //uint64
 	GraduationSchool frontend.Variable //string
-	Gender           frontend.Variable //rune
+	Gender           frontend.Variable //string
 	Property         frontend.Variable //uint64
 	Citizenship      frontend.Variable //string
 	Signature        eddsa.Signature   `gnark:"signature,public"`
@@ -32,7 +32,7 @@ func (dcircuit *DCircuit) Define(api frontend.API) error {
 		return err
 	}
 	hFunc.Write(dcircuit.ID,
-		dcircuit.Income,
+		dcircuit.Name,
 		dcircuit.BirthYear,
 		dcircuit.Income,
 		dcircuit.GraduationSchool,

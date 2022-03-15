@@ -1,0 +1,10 @@
+{
+    "ID": 1,
+    "Name": "Alice",
+    "BirthYear": 2000,
+    "Income": 10000,
+    "GraduationSchool": "Shanghai Jiao Tong University",
+    "Gender": "Female",
+    "Property": 10000,
+    "Citizenship": "China"
+}
