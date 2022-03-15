@@ -28,21 +28,21 @@ func (dcircuit *DCircuit) Define(api frontend.API) error {
 	}
 	dcircuit.Publickey.Curve = params
 	hFunc, err := mimc.NewMiMC(api)
+	hFunc.Reset()
 	if err != nil {
 		return err
 	}
-	hFunc.Write(dcircuit.ID,
+	hFunc.Write(
+		dcircuit.ID,
 		dcircuit.Name,
 		dcircuit.BirthYear,
 		dcircuit.Income,
 		dcircuit.GraduationSchool,
 		dcircuit.Gender,
 		dcircuit.Property,
-		dcircuit.Property,
-		dcircuit.Citizenship,
-		dcircuit.Publickey.A.X,
-		dcircuit.Publickey.A.Y)
+		dcircuit.Citizenship)
 	hSum := hFunc.Sum()
+	hFunc.Reset()
 	err = eddsa.Verify(api, dcircuit.Signature, hSum, dcircuit.Publickey)
 	if err != nil {
 		return err

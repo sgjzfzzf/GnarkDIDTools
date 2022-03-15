@@ -40,7 +40,7 @@ func (initializer *Initializer) GenerateWitness(sk eddsa.PrivateKey) (*witness.W
 	if err != nil {
 		return nil, err
 	}
-	dcircuit.Signature.S = signature.S
+	dcircuit.Signature.S = signature.S[:]
 	dcircuit.Signature.R.X = signature.R.X
 	dcircuit.Signature.R.Y = signature.R.Y
 	dcircuit.Publickey.A.X = sk.PublicKey.A.X
@@ -50,7 +50,7 @@ func (initializer *Initializer) GenerateWitness(sk eddsa.PrivateKey) (*witness.W
 
 func GeneratePublicWitness(signature eddsa.Signature, pk eddsa.PublicKey) (*witness.Witness, error) {
 	dcircuit := DCircuit{}
-	dcircuit.Signature.S = signature.S
+	dcircuit.Signature.S = signature.S[:]
 	dcircuit.Signature.R.X = signature.R.X
 	dcircuit.Signature.R.Y = signature.R.Y
 	dcircuit.Publickey.A.X = pk.A.X
@@ -64,68 +64,70 @@ func GeneratePublicWitness(signature eddsa.Signature, pk eddsa.PublicKey) (*witn
 
 func (initializer *Initializer) GenerateSignature(sk eddsa.PrivateKey) (eddsa.Signature, error) {
 	hFunc := mimc.NewMiMC()
+	hFunc.Reset()
+	signature := eddsa.Signature{}
 	element := fr.NewElement(initializer.ID)
 	bytes := element.Bytes()
 	_, err := hFunc.Write(bytes[:])
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
 
 	element = GnarkDID.TransferStringHashToElement(initializer.Name)
 	bytes = element.Bytes()
 	_, err = hFunc.Write(bytes[:])
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
 
-	element = fr.NewElement(initializer.BirthYear)
+	element.SetUint64(initializer.BirthYear)
 	bytes = element.Bytes()
 	_, err = hFunc.Write(bytes[:])
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
 
-	element = fr.NewElement(initializer.Income)
+	element.SetUint64(initializer.Income)
 	bytes = element.Bytes()
 	_, err = hFunc.Write(bytes[:])
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
 
 	element = GnarkDID.TransferStringHashToElement(initializer.GraduationSchool)
 	bytes = element.Bytes()
 	_, err = hFunc.Write(bytes[:])
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
 
 	element = GnarkDID.TransferStringHashToElement(initializer.Gender)
 	bytes = element.Bytes()
 	_, err = hFunc.Write(bytes[:])
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
 
-	element = fr.NewElement(initializer.Property)
+	element.SetUint64(initializer.Property)
 	bytes = element.Bytes()
 	_, err = hFunc.Write(bytes[:])
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
+
 	element = GnarkDID.TransferStringHashToElement(initializer.Citizenship)
 	bytes = element.Bytes()
 	_, err = hFunc.Write(bytes[:])
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
 
 	hSum := hFunc.Sum([]byte{})
 	hFunc.Reset()
 	rawSign, err := sk.Sign(hSum, hFunc)
 	if err != nil {
-		return eddsa.Signature{}, err
+		return signature, err
 	}
-	signature := eddsa.Signature{}
 	signature.SetBytes(rawSign)
 	return signature, nil
 }
