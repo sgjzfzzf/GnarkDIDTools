@@ -16,8 +16,8 @@ type DCircuit struct {
 	Gender           frontend.Variable //string
 	Property         frontend.Variable //uint64
 	Citizenship      frontend.Variable //string
-	Signature        eddsa.Signature   `gnark:"signature,public"`
-	Publickey        eddsa.PublicKey   `gnark:"publickey,public"`
+	Signature        eddsa.Signature
+	Publickey        eddsa.PublicKey `gnark:"publickey,public"`
 }
 
 func (dcircuit *DCircuit) Define(api frontend.API) error {

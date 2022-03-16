@@ -43,6 +43,6 @@ func main() {
 	seedReader := strings.NewReader(seed)
 	err := GnarkDID.GenerateSaveKey(seedReader, output)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "errors happened during generation")
+		fmt.Fprintf(os.Stderr, "errors happened during generation\n")
 	}
 }

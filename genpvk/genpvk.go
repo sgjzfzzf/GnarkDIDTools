@@ -21,7 +21,6 @@ func (defaultCircuit *DefaultCircuit) Define(api frontend.API) error {
 
 func main() {
 	output := "key"
-	existsInput := false
 	input := ""
 	for i, v := range os.Args {
 		if v == "-o" || v == "--out" {
@@ -36,12 +35,11 @@ func main() {
 				fmt.Fprintf(os.Stderr, "cannot parse the command\n")
 				return
 			} else {
-				existsInput = true
 				input = os.Args[i+1]
 			}
 		}
 	}
-	if !existsInput {
+	if input == "" {
 		fmt.Fprintf(os.Stderr, "cannot find input r1cs\n")
 		return
 	} else {

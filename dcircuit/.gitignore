@@ -1,4 +1,10 @@
-*.r1cs
-*.bk
-*.pk
-*.proof
+*
+
+!*.go
+!genproof
+!genr1cs
+!test
+!verify
+!*.md
+!go.mod
+!go.sum

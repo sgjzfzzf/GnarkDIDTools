@@ -48,16 +48,25 @@ func (initializer *Initializer) GenerateWitness(sk eddsa.PrivateKey) (*witness.W
 	return frontend.NewWitness(&dcircuit, ecc.BN254)
 }
 
-func GeneratePublicWitness(signature eddsa.Signature, pk eddsa.PublicKey) (*witness.Witness, error) {
+func GeneratePublicWitness(pk eddsa.PublicKey) (*witness.Witness, error) {
 	dcircuit := DCircuit{}
-	dcircuit.Signature.S = signature.S[:]
-	dcircuit.Signature.R.X = signature.R.X
-	dcircuit.Signature.R.Y = signature.R.Y
+	dcircuit.ID = 0
+	dcircuit.Name = 0
+	dcircuit.BirthYear = 0
+	dcircuit.Income = 0
+	dcircuit.GraduationSchool = 0
+	dcircuit.Gender = 0
+	dcircuit.Property = 0
+	dcircuit.Citizenship = 0
+	dcircuit.Signature.S = 0
+	dcircuit.Signature.R.X = 0
+	dcircuit.Signature.R.Y = 0
 	dcircuit.Publickey.A.X = pk.A.X
 	dcircuit.Publickey.A.Y = pk.A.Y
 	witness, err := frontend.NewWitness(&dcircuit, ecc.BN254)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "cannot generate witness\n")
+		return witness, err
 	}
 	return witness.Public()
 }
