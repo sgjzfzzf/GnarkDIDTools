@@ -3,6 +3,7 @@
 !*.go
 !genproof
 !genr1cs
+!genwitness
 !test
 !verify
 !*.md

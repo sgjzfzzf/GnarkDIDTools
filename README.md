@@ -35,8 +35,7 @@
 go run ./genproof/genproof.go [opt]
 opt:
 	-o(--out) #the name of output proof file name
-	-i(--input) #the name of the json file representing witness
-	-k(--key) #the name of private key file name
+	-i(--in) #the name of the witness file representing witness
 	-p(--pkey) #the name of prooving key file name
 	-r(--r) #the name of r1cs file name
 ```
@@ -44,10 +43,10 @@ opt:
 用例如下
 
 ```bash
-go run ./genproof/genproof.go -i mywitness.json -k mysk.bk -p mypk.pk -r myr1cs.r1cs -o myproof.proof
+go run ./genproof/genproof.go -i mywitness.wit -p mypk.pk -r myr1cs.r1cs -o myproof
 ```
 
-该指令会使用`mywitness.json`作为witness文件，`mysk.bk`作为私钥，`mypk.pk`作为证明密钥，`myr1cs.r1cs`作为电路文件，输出`myproof.proof`作为证明文件。
+该指令会使用`mywitness.wit`作为witness文件，`mypk.pk`作为证明密钥，`myr1cs.r1cs`作为电路文件，输出`myproof.proof`作为证明文件。
 
 该指令`-o`参数可以省略，则默认输出文件名为`proof`。
 
@@ -71,6 +70,28 @@ go run ./genr1cs/genr1cs.go -o mycircuit
 
 该指令参数`-o`可省略，则默认输出文件名为`dcircuit`。
 
+### genwitness
+
+该部分用于完成witness的签名部分并生成二进制签名文件。使用格式如下
+
+```bash
+go run ./genwitness/genwitness.go [opt]
+opt:
+	-o(--out) #the name of output witness file, just the former part
+	-i(--in) #the name of input json file
+	-k #the name of private key file
+```
+
+用例如下
+
+```bash
+go run ./genwitness.genwitness.go -i witness.json -k key.bk -o witness
+```
+
+该指令会基于`witness.json`，利用私钥`key.bk`进行签名，并将整个结果保存为`witness.wit`。
+
+该指令参数`-o`可省略，则默认输出文件名为`witness`。
+
 ### verify
 
 该子部分用于验证证明是否成立。使用格式如下
@@ -81,15 +102,16 @@ opt:
 	-p(--proof) #the name of proof file
 	-v(--vkey) #the name of verifying key file
 	-k(--pkey) #the name of public key file
+	-i(--id) #the value of id
 ```
 
 用例如下
 
 ```bash
-go run ./verify/verify.go -p myproof.proof -v myvk.vk -k mypk.bk.pub
+go run ./verify/verify.go -p myproof.proof -v myvk.vk -k mypk.bk.pub -i ID
 ```
 
-该指令会使用`myproof.proof`作为证明文件，`myvk.vk`作为证明密钥，`mypk.bk.pub`作为公钥进行验证。如果验证成功输出`Right.`，否则输出`Wrong.`和错误原因。
+该指令会使用`myproof.proof`作为证明文件，`myvk.vk`作为证明密钥，`mypk.bk.pub`作为公钥，`id`作为一部分public witness进行验证。如果验证成功输出`Right.`，否则输出`Wrong.`和错误原因。
 
 ## genkey
 

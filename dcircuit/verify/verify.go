@@ -4,6 +4,7 @@ import (
 	"GnarkDIDTools/dcircuit"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/consensys/gnark/backend/groth16"
 	"github.com/sgjzfzzf/GnarkDID"
@@ -13,6 +14,7 @@ func main() {
 	prooff := ""
 	vkf := ""
 	pkf := ""
+	ID := ""
 	for i, v := range os.Args {
 		if v == "-p" || v == "--proof" {
 			if i+1 >= len(os.Args) || os.Args[i+1][0] == '-' {
@@ -34,6 +36,13 @@ func main() {
 				return
 			} else {
 				pkf = os.Args[i+1]
+			}
+		} else if v == "-i" || v == "--id" {
+			if i+1 >= len(os.Args) || os.Args[i+1][0] == '-' {
+				fmt.Fprintf(os.Stderr, "cannot parse the command\n")
+				return
+			} else {
+				ID = os.Args[i+1]
 			}
 		}
 	}
@@ -74,7 +83,12 @@ func main() {
 		}
 		file.Close()
 
-		publicWitness, err := dcircuit.GeneratePublicWitness(pk)
+		id, err := strconv.ParseUint(ID, 10, 64)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "cannot parse the id, err: %s\n", err)
+			return
+		}
+		publicWitness, err := dcircuit.GeneratePublicWitness(id, pk)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "cannot generate public witness, err: %s\n", err)
 			return

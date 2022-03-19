@@ -48,9 +48,39 @@ func (initializer *Initializer) GenerateWitness(sk eddsa.PrivateKey) (*witness.W
 	return frontend.NewWitness(&dcircuit, ecc.BN254)
 }
 
-func GeneratePublicWitness(pk eddsa.PublicKey) (*witness.Witness, error) {
+func (initializer *Initializer) GenerateSaveWitness(sk eddsa.PrivateKey, file *os.File) (*witness.Witness, error) {
+	witness, err := initializer.GenerateWitness(sk)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cannot generate witness, err: %s\n", err)
+		return nil, err
+	}
+	bytes, err := witness.MarshalBinary()
+	file.Write(bytes)
+	return witness, nil
+}
+
+func ReadWitness(file *os.File) (*witness.Witness, error) {
+	w, err := witness.New(ecc.BN254, nil)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cannot generate witness, err: %s\n", err)
+		return w, err
+	}
+	bytes, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cannot read witness, err: %s\n", err)
+		return w, err
+	}
+	err = w.UnmarshalBinary(bytes)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "cannot parse witness, err: %s\n", err)
+		return w, err
+	}
+	return w, nil
+}
+
+func GeneratePublicWitness(ID uint64, pk eddsa.PublicKey) (*witness.Witness, error) {
 	dcircuit := DCircuit{}
-	dcircuit.ID = 0
+	dcircuit.ID = ID
 	dcircuit.Name = 0
 	dcircuit.BirthYear = 0
 	dcircuit.Income = 0
@@ -65,7 +95,7 @@ func GeneratePublicWitness(pk eddsa.PublicKey) (*witness.Witness, error) {
 	dcircuit.Publickey.A.Y = pk.A.Y
 	witness, err := frontend.NewWitness(&dcircuit, ecc.BN254)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "cannot generate witness\n")
+		fmt.Fprintf(os.Stderr, "cannot generate witness, err: %s\n", err)
 		return witness, err
 	}
 	return witness.Public()

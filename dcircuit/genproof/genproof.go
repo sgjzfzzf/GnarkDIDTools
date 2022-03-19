@@ -12,7 +12,6 @@ import (
 
 func main() {
 	input := ""
-	key := ""
 	pkey := ""
 	output := "proof"
 	r1csf := ""
@@ -23,13 +22,6 @@ func main() {
 				return
 			} else {
 				input = os.Args[i+1]
-			}
-		} else if v == "-k" || v == "--key" {
-			if i+1 >= len(os.Args) || os.Args[i+1][0] == '-' {
-				fmt.Fprintf(os.Stderr, "cannot parse the command\n")
-				return
-			} else {
-				key = os.Args[i+1]
 			}
 		} else if v == "-p" || v == "--pkey" {
 			if i+1 >= len(os.Args) || os.Args[i+1][0] == '-' {
@@ -55,32 +47,16 @@ func main() {
 		}
 	}
 
-	if input != "" && pkey != "" && key != "" && r1csf != "" {
+	if pkey != "" && r1csf != "" && input != "" {
+
 		file, err := os.Open(input)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "cannot open the input file, err: %s", err)
+			fmt.Fprintf(os.Stderr, "cannot open the witness file, err: %s", err)
 			return
 		}
-		initializer, err := dcircuit.NewInitiallizer(file)
+		witness, err := dcircuit.ReadWitness(file)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "cannot read the input file, err: %s", err)
-			return
-		}
-		file.Close()
-
-		file, err = os.Open(key)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "cannot open the key file, err: %s", err)
-			return
-		}
-		sk, err := GnarkDID.ReadSavedPrivateKey(file)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "cannot read the saved key file, err: %s", err)
-			return
-		}
-		witness, err := initializer.GenerateWitness(sk)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "cannot generate witness, err: %s", err)
+			fmt.Fprintf(os.Stderr, "cannot read the witness file, err: %s", err)
 			return
 		}
 		file.Close()
@@ -121,7 +97,6 @@ func main() {
 			return
 		}
 	} else {
-		fmt.Printf("%s, %s, %s, %s\n", input, pkey, key, r1csf)
 		fmt.Fprintf(os.Stderr, "cannot find the input parameter\n")
 	}
 

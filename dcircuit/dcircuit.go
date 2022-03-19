@@ -8,7 +8,7 @@ import (
 )
 
 type DCircuit struct {
-	ID               frontend.Variable //uint64
+	ID               frontend.Variable `gnark:"ID,public"` //uint64
 	Name             frontend.Variable //string
 	BirthYear        frontend.Variable //uint64
 	Income           frontend.Variable //uint64
@@ -40,7 +40,8 @@ func (dcircuit *DCircuit) Define(api frontend.API) error {
 		dcircuit.GraduationSchool,
 		dcircuit.Gender,
 		dcircuit.Property,
-		dcircuit.Citizenship)
+		dcircuit.Citizenship,
+	)
 	hSum := hFunc.Sum()
 	hFunc.Reset()
 	err = eddsa.Verify(api, dcircuit.Signature, hSum, dcircuit.Publickey)
