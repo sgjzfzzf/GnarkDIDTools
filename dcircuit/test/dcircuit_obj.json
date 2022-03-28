@@ -4,6 +4,7 @@
     "BirthYear": 2000,
     "Income": 10000,
     "GraduationSchool": "Shanghai Jiao Tong University",
+    "GPA": 3.7,
     "Gender": "Female",
     "Property": 10000,
     "Citizenship": "China"

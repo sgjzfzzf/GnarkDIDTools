@@ -13,9 +13,12 @@ type DCircuit struct {
 	BirthYear        frontend.Variable //uint64
 	Income           frontend.Variable //uint64
 	GraduationSchool frontend.Variable //string
+	GPA              frontend.Variable //uint64
 	Gender           frontend.Variable //string
 	Property         frontend.Variable //uint64
 	Citizenship      frontend.Variable //string
+	PublishYear      frontend.Variable //uint64
+	PublishMonth     frontend.Variable //uint64
 	Signature        eddsa.Signature
 	Publickey        eddsa.PublicKey `gnark:"publickey,public"`
 }
@@ -38,9 +41,12 @@ func (dcircuit *DCircuit) Define(api frontend.API) error {
 		dcircuit.BirthYear,
 		dcircuit.Income,
 		dcircuit.GraduationSchool,
+		dcircuit.GPA,
 		dcircuit.Gender,
 		dcircuit.Property,
 		dcircuit.Citizenship,
+		dcircuit.PublishYear,
+		dcircuit.PublishMonth,
 	)
 	hSum := hFunc.Sum()
 	hFunc.Reset()

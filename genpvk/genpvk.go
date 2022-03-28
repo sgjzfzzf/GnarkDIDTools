@@ -30,7 +30,7 @@ func main() {
 			} else {
 				output = os.Args[i+1]
 			}
-		} else if v == "-i" || v == "--input" {
+		} else if v == "-i" || v == "--in" {
 			if i+1 >= len(os.Args) || os.Args[i+1][0] == '-' {
 				fmt.Fprintf(os.Stderr, "cannot parse the command\n")
 				return

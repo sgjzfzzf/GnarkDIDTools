@@ -30,7 +30,7 @@ func main() {
 			} else {
 				vkf = os.Args[i+1]
 			}
-		} else if v == "-k" || v == "--pkey" {
+		} else if v == "-k" || v == "--pubkey" {
 			if i+1 >= len(os.Args) || os.Args[i+1][0] == '-' {
 				fmt.Fprintf(os.Stderr, "cannot parse the command\n")
 				return

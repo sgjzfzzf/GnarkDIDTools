@@ -101,7 +101,7 @@ go run ./verify/verify.go [opt]
 opt:
 	-p(--proof) #the name of proof file
 	-v(--vkey) #the name of verifying key file
-	-k(--pkey) #the name of public key file
+	-k(--pubkey) #the name of public key file
 	-i(--id) #the value of id
 ```
 
@@ -142,7 +142,7 @@ go run genkey.go -o mykey -s "Hello, Gnark!"
 go run genpvk.go [opt]
 opt:
 	-o(--out) #the name of output key file, just the former part
-	-i(--input) #the name of input r1cs file, cannot ignore
+	-i(--in) #the name of input r1cs file, cannot ignore
 ```
 
 用例如下

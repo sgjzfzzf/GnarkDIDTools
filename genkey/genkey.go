@@ -21,7 +21,7 @@ func randString(len int) string {
 }
 
 func main() {
-	output := "privatekey"
+	output := "key"
 	seed := randString(256)
 	for i, v := range os.Args {
 		if v == "-o" || v == "--out" {

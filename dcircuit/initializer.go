@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"time"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fr"
@@ -15,15 +16,30 @@ import (
 	"github.com/sgjzfzzf/GnarkDID"
 )
 
+type RawInitializer struct {
+	ID               uint64
+	Name             string
+	BirthYear        uint64
+	Income           uint64
+	GraduationSchool string
+	GPA              float64
+	Gender           string
+	Property         uint64
+	Citizenship      string
+}
+
 type Initializer struct {
 	ID               uint64
 	Name             string
 	BirthYear        uint64
 	Income           uint64
 	GraduationSchool string
+	GPA              uint64
 	Gender           string
 	Property         uint64
 	Citizenship      string
+	PublishYear      uint64
+	PublishMonth     uint64
 }
 
 func (initializer *Initializer) GenerateWitness(sk eddsa.PrivateKey) (*witness.Witness, error) {
@@ -33,9 +49,12 @@ func (initializer *Initializer) GenerateWitness(sk eddsa.PrivateKey) (*witness.W
 	dcircuit.BirthYear = initializer.BirthYear
 	dcircuit.Income = initializer.Income
 	dcircuit.GraduationSchool = GnarkDID.TransferStringHashToElement(initializer.GraduationSchool)
+	dcircuit.GPA = initializer.GPA
 	dcircuit.Gender = GnarkDID.TransferStringHashToElement(initializer.Gender)
 	dcircuit.Property = initializer.Property
 	dcircuit.Citizenship = GnarkDID.TransferStringHashToElement(initializer.Citizenship)
+	dcircuit.PublishYear = initializer.PublishYear
+	dcircuit.PublishMonth = initializer.PublishMonth
 	signature, err := initializer.GenerateSignature(sk)
 	if err != nil {
 		return nil, err
@@ -85,9 +104,12 @@ func GeneratePublicWitness(ID uint64, pk eddsa.PublicKey) (*witness.Witness, err
 	dcircuit.BirthYear = 0
 	dcircuit.Income = 0
 	dcircuit.GraduationSchool = 0
+	dcircuit.GPA = 0
 	dcircuit.Gender = 0
 	dcircuit.Property = 0
 	dcircuit.Citizenship = 0
+	dcircuit.PublishYear = 0
+	dcircuit.PublishMonth = 0
 	dcircuit.Signature.S = 0
 	dcircuit.Signature.R.X = 0
 	dcircuit.Signature.R.Y = 0
@@ -140,6 +162,13 @@ func (initializer *Initializer) GenerateSignature(sk eddsa.PrivateKey) (eddsa.Si
 		return signature, err
 	}
 
+	element.SetUint64(initializer.GPA)
+	bytes = element.Bytes()
+	_, err = hFunc.Write(bytes[:])
+	if err != nil {
+		return signature, err
+	}
+
 	element = GnarkDID.TransferStringHashToElement(initializer.Gender)
 	bytes = element.Bytes()
 	_, err = hFunc.Write(bytes[:])
@@ -161,6 +190,20 @@ func (initializer *Initializer) GenerateSignature(sk eddsa.PrivateKey) (eddsa.Si
 		return signature, err
 	}
 
+	element.SetUint64(initializer.PublishYear)
+	bytes = element.Bytes()
+	_, err = hFunc.Write(bytes[:])
+	if err != nil {
+		return signature, err
+	}
+
+	element.SetUint64(initializer.PublishMonth)
+	bytes = element.Bytes()
+	_, err = hFunc.Write(bytes[:])
+	if err != nil {
+		return signature, err
+	}
+
 	hSum := hFunc.Sum([]byte{})
 	hFunc.Reset()
 	rawSign, err := sk.Sign(hSum, hFunc)
@@ -172,11 +215,29 @@ func (initializer *Initializer) GenerateSignature(sk eddsa.PrivateKey) (eddsa.Si
 }
 
 func NewInitiallizer(file *os.File) (Initializer, error) {
+	rawInitializer := RawInitializer{}
 	initializer := Initializer{}
 	bytes, err := ioutil.ReadAll(file)
 	if err != nil {
 		return initializer, err
 	}
-	err = json.Unmarshal(bytes, &initializer)
+	err = json.Unmarshal(bytes, &rawInitializer)
+	initializer = *rawInitializer.convertToInitializer()
+	initializer.PublishYear = uint64(time.Now().Year())
+	initializer.PublishMonth = uint64(time.Now().Month())
 	return initializer, err
+}
+
+func (rawInitializer *RawInitializer) convertToInitializer() *Initializer {
+	initializer := new(Initializer)
+	initializer.ID = rawInitializer.ID
+	initializer.Name = rawInitializer.Name
+	initializer.BirthYear = rawInitializer.BirthYear
+	initializer.Income = rawInitializer.Income
+	initializer.GraduationSchool = rawInitializer.GraduationSchool
+	initializer.GPA = uint64(rawInitializer.GPA) * 100
+	initializer.Gender = rawInitializer.Gender
+	initializer.Property = rawInitializer.Property
+	initializer.Citizenship = rawInitializer.Citizenship
+	return initializer
 }

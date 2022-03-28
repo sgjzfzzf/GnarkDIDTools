@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/sgjzfzzf/GnarkDID"
+
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/backend/groth16"
-	"github.com/sgjzfzzf/GnarkDID"
 )
 
 func main() {
