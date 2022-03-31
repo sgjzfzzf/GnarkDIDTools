@@ -1,0 +1,11 @@
+{
+    "ID": 3,
+    "Name": "Carol",
+    "BirthYear": 1960,
+    "Income": 10000,
+    "GraduationSchool": "Fudan University",
+    "GPA": 3.0,
+    "Gender": "Male",
+    "Property": 200000,
+    "Citizenship": "China"
+}

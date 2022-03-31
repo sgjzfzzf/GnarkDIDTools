@@ -3,5 +3,5 @@
 !dcircuit/
 !genkey/
 !genpvk/
-!menu.py
+!*.py
 !README.md

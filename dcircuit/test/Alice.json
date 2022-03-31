@@ -1,0 +1,11 @@
+{
+    "ID": 1,
+    "Name": "Alice",
+    "BirthYear": 2004,
+    "Income": 0,
+    "GraduationSchool": "Tsinghua University",
+    "GPA": 4.0,
+    "Gender": "Female",
+    "Property": 0,
+    "Citizenship": "China"
+}

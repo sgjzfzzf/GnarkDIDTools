@@ -122,6 +122,7 @@ def verify(proof: str = None, vkey: str = None, pubkey: str = None, id: str = No
     os.chdir(wdir)
     out = os.popen(s)
     res = out.read()
+    out.close()
     if res == "Right.\n":
         return True
     elif res[:7] == "Wrong.\n":
@@ -175,14 +176,3 @@ def genpvk(out: str = None, in_: str = None) -> None:
             _, end = os.path.splitext(file)
             if end == ".pk" or end == ".vk":
                 movefile(file, pvkdir, wdir)
-
-
-# Example: you can excute the following example to test the whole program
-# genkey()
-# genr1cs()
-# genpvk(in_="./r1cs/dcircuit.r1cs")
-# genwitness(in_="./dcircuit/test/dcircuit_obj.json", key="./key/key.bk")
-# genproof(in_="./witness/witness.wit",
-#          pkey="./pvk/key.pk", r1cs="./r1cs/dcircuit.r1cs")
-# print(verify(proof="./proof/proof.proof",
-#              vkey="./pvk/key.vk", pubkey="./key/key.bk.pub", id="1"))

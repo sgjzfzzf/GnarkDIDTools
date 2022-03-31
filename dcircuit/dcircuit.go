@@ -60,5 +60,36 @@ func (dcircuit *DCircuit) Define(api frontend.API) error {
 		Define your own constraints there in the form of gnark.
 	*/
 
+	// Example 1:
+	// maxGPA := api.ConstantValue(430)
+	// api.AssertIsLessOrEqual(api.Sub(maxGPA, dcircuit.GPA), api.Sub(maxGPA, api.ConstantValue(370)))
+	// unis := []string{"Shanghai Jiao Tong University", "Fudan University", "Tongji University", "East China Normal University"}
+	// isTrue := api.FromBinary(1)
+	// for _, uni := range unis {
+	// 	res := api.Cmp(dcircuit.GraduationSchool, GnarkDID.TransferStringHashToElement(uni))
+	// 	isTrue = api.Mul(res, isTrue)
+	// }
+	// api.AssertIsEqual(isTrue, api.ConstantValue(0))
+
+	// Example 2:
+	// maxIncome := api.ConstantValue(0x7fffffff)
+	// api.AssertIsLessOrEqual(dcircuit.BirthYear, api.ConstantValue(time.Now().Year()-18))
+	// api.AssertIsLessOrEqual(api.Sub(maxIncome, dcircuit.Income), api.Sub(maxIncome, api.ConstantValue(5000)))
+	// nowTime := api.ConstantValue(time.Now().Year()*12 + int(time.Now().Month()))
+	// pubTime := api.Add(api.Mul(dcircuit.PublishYear, 12), dcircuit.PublishMonth)
+	// api.AssertIsLessOrEqual(api.Sub(nowTime, pubTime), api.ConstantValue(3))
+
+	// Example 3:
+	// api.AssertIsLessOrEqual(dcircuit.Property, api.ConstantValue(5000))
+	// nowTime := api.ConstantValue(time.Now().Year()*12 + int(time.Now().Month()))
+	// pubTime := api.Add(api.Mul(dcircuit.PublishYear, 12), dcircuit.PublishMonth)
+	// api.AssertIsLessOrEqual(api.Sub(nowTime, pubTime), api.ConstantValue(3))
+
+	// Example 4:
+	// api.AssertIsLessOrEqual(dcircuit.BirthYear, api.ConstantValue(time.Now().Year()-60))
+	// nowTime := api.ConstantValue(time.Now().Year()*12 + int(time.Now().Month()))
+	// pubTime := api.Add(api.Mul(dcircuit.PublishYear, 12), dcircuit.PublishMonth)
+	// api.AssertIsLessOrEqual(api.Sub(nowTime, pubTime), api.ConstantValue(3))
+
 	return nil
 }

@@ -1,0 +1,11 @@
+{
+    "ID": 2,
+    "Name": "Bob",
+    "BirthYear": 2000,
+    "Income": 10000,
+    "GraduationSchool": "Shanghai Jiao Tong University",
+    "GPA": 3.7,
+    "Gender": "Male",
+    "Property": 10000,
+    "Citizenship": "China"
+}

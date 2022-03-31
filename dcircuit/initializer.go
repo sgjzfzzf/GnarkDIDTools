@@ -235,7 +235,7 @@ func (rawInitializer *RawInitializer) convertToInitializer() *Initializer {
 	initializer.BirthYear = rawInitializer.BirthYear
 	initializer.Income = rawInitializer.Income
 	initializer.GraduationSchool = rawInitializer.GraduationSchool
-	initializer.GPA = uint64(rawInitializer.GPA) * 100
+	initializer.GPA = uint64(rawInitializer.GPA * 100)
 	initializer.Gender = rawInitializer.Gender
 	initializer.Property = rawInitializer.Property
 	initializer.Citizenship = rawInitializer.Citizenship
