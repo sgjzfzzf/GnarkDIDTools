@@ -28,7 +28,7 @@ class GnarkToolTest1(unittest.TestCase):
         genproof(in_="./witness/witness.wit",
                  pkey="./pvk/key.pk", r1cs="./r1cs/dcircuit.r1cs")
         res = verify(proof="./proof/proof.proof",
-                     vkey="./pvk/key.vk", pubkey="./key/key.bk.pub", id="2")
+                     vkey="./pvk/key.vk", pubkey="./key/key.bk.pub", id="341928501")
         self.assertEqual(res, True)
 
     def test_example_3(self):
